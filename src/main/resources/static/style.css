@@ -1,0 +1,30 @@
+body, ul, li{
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+.wrap {
+  margin : 0;
+  padding : 0;
+}
+
+.content-wrap {
+  display : flex;
+}
+
+.locationlist {
+    background : gray;
+    width : 25%;
+    height : 800px;
+}
+.mapside {
+    background : bisque;
+    width : 75%;
+    height : 800px;
+}
