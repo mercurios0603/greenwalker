@@ -9,7 +9,7 @@ a{
   color:inherit;
 }
 
-.wrap {
+.main-wrap {
   margin : 0;
   padding : 0;
 }
@@ -19,12 +19,12 @@ a{
 }
 
 .locationlist {
-    background : gray;
+    background : azure;
     width : 25%;
-    height : 800px;
+    height : 750px;
 }
 .mapside {
     background : bisque;
     width : 75%;
-    height : 800px;
+    height : 750px;
 }
