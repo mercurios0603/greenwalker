@@ -17,4 +17,9 @@ public class MainController {
   public String root() {
     return "redirect:/main";
   }
+
+  @GetMapping("/search")
+  public String search() {
+    return "search";
+  }
 }
