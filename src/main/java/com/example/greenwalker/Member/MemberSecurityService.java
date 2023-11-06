@@ -38,6 +38,7 @@ public class MemberSecurityService implements UserDetailsService {
     } else {
       authorities.add(new SimpleGrantedAuthority(MemberRole.USER.getValue()));
     }
+    // 위의 구문 자체가 회원가입시 admin이면 관리자 권한을 부여하는 것을 의미한다.
     // 사용자명, 비밀번호, 권한을 입력으로 스프링 시큐리티의 User 객체를 생성하여 리턴했다.
     // 스프링 시큐리티는 loadUserByUsername 메서드에 의해 리턴된 User 객체의 비밀번호가
     // 화면으로부터 입력 받은 비밀번호와 일치하는지를 검사하는 로직을 내부적으로 가지고 있다.

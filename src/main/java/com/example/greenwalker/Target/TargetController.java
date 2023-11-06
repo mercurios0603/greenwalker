@@ -1,5 +1,7 @@
 package com.example.greenwalker.Target;
 
+import com.example.greenwalker.Member.Member;
+import com.example.greenwalker.Member.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.ui.Model;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +23,7 @@ import java.util.Map;
 public class TargetController {
 
   private final TargetService targetService;
+  private final MemberService memberService;
 
   @GetMapping("/regist")
   public String targetRegist(TargetCreateForm targetCreateForm) {
@@ -27,12 +31,13 @@ public class TargetController {
   }
 
   @PostMapping("/regist")
-  public String targetRegist(@Valid TargetCreateForm targetCreateForm, BindingResult bindingResult) {
+  public String targetRegist(@Valid TargetCreateForm targetCreateForm, BindingResult bindingResult, Principal principal) {
       if (bindingResult.hasErrors()) {
         return "target_regist";
       }
+      Member member = this.memberService.getMember(principal.getName());
       this.targetService.createTarget(targetCreateForm.getLocationcategory(), targetCreateForm.getLocationname( )
-              , targetCreateForm.getLocationaddress(), Double.parseDouble(targetCreateForm.getLocationlat()), Double.parseDouble(targetCreateForm.getLocationlng()));
+              , targetCreateForm.getLocationaddress(), Double.parseDouble(targetCreateForm.getLocationlat()), Double.parseDouble(targetCreateForm.getLocationlng()), member);
     return "redirect:/target/regist";
   }
 
@@ -59,9 +64,6 @@ public class TargetController {
     List<Target> searchresult = this.targetService.searchTarget(latclick1, lngclick1, radius);
 
     model.addAttribute("searchresult", searchresult);
-
-
-
 
     return "search";
   }

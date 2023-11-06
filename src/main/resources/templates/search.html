@@ -12,7 +12,7 @@
             <div class="locationlist">
                 <div>
                     <form th:action="@{/target/search}" method="post">
-                    <div>
+                    <div sec:authorize="isAuthenticated()">
                         <select class="defaultstarting form-select form-select-lg mb-3" aria-label="Large select example">
                             <option value="home"> 집 </option>
                             <option value="company"> 회사 </option>

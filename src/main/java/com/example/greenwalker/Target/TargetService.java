@@ -14,7 +14,7 @@ public class TargetService {
 
   private final TargetRepository targetRepository;
 
-  public Target createTarget(String locationcategory, String locationname, String locationaddress, Double locationlat, Double locationlng) {
+  public Target createTarget(String locationcategory, String locationname, String locationaddress, Double locationlat, Double locationlng, Member member) {
 
     Target target = new Target();
 
@@ -23,6 +23,7 @@ public class TargetService {
     target.setLocationAddress(locationaddress);
     target.setLocationLat(locationlat);
     target.setLocationLng(locationlng);
+    target.setMember(member);
 
     this.targetRepository.save(target);
     return target;

@@ -1,9 +1,10 @@
 package com.example.greenwalker.Target;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.greenwalker.Member.Member;
+
+import com.example.greenwalker.TargetInfo.TargetInfo;
+import com.example.greenwalker.TargetStatus.TargetStatus;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,4 +27,12 @@ public class Target {
 
   private Double locationLng;
 
+  @ManyToOne
+  private Member member;
+
+  @OneToOne(mappedBy = "target", cascade = CascadeType.REMOVE)
+  private TargetInfo targetinfo;
+
+  @OneToOne(mappedBy = "target", cascade = CascadeType.REMOVE)
+  private TargetStatus targetstatus;
 }

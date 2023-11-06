@@ -13,12 +13,11 @@
                     <form th:action="@{/target/regist}" th:object="${targetCreateForm}" method="post">
                     <div th:replace="~{form_errors :: formErrorsFragment}"></div>
                     <div>
-                        장소 분류
                         <select th:field="*{locationcategory}" class="form-select form-select-lg mb-3" aria-label="Large select example">
                             <option th:value = "home"> [공용] 집 </option>
                             <option th:value = "company"> [공용] 회사 </option>
                             <option th:value = "favorite"> [공용] 즐겨찾기 </option>
-                            <option th:value = "target"> [관리자전용] 임무수행지 </option>
+                            <option sec:authorize="isAuthenticated() and hasRole('ADMIN')" th:value = "target"> [관리자전용] 임무수행지 </option>
                         </select>
                     </div>
                     <div>
