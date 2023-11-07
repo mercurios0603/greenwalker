@@ -28,3 +28,43 @@ a{
     width : 70%;
     height : 750px;
 }
+
+.wrap {
+	position:absoulte;
+	height:280px;
+	width:160px;
+	margin-bottom:800px;
+	border: solid #F2F2F2 2px;
+	border-radius: 15px;
+	background: #fff;
+}
+
+.classimg {
+	height :160px;
+	width:160px;
+}
+
+.classinfo {
+	padding:5px;
+}
+
+.classtitle {
+	display: inline-block;
+	white-space: normal;
+	overflow:hidden;
+	text-overflow: ellipsis;
+	line-height:1.5;
+	height:3.0em
+}
+
+
+.classpay {
+	display: inline-block;
+	line-height:1.5
+}
+
+.classse {
+	display: inline-block;
+	float:right;
+	line-height:1.5;
+}

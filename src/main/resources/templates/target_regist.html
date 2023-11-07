@@ -5,6 +5,7 @@
     <title>장소를 등록해주세요</title>
     <link rel="stylesheet" href="/searchwindow.css">
 </head>
+<body>
 <div layout:fragment="content">
     <div class="main-wrap">
         <div class="content-wrap">
@@ -39,6 +40,10 @@
                              <label for="locationlng" class="form-label">경도</label>
                              <input type="text" th:field="*{locationlng}" th:value="위도" readonly>
                          </div>
+                    </div>
+                    <div>
+                         장소에 대한 설명이 입력이 필요합니다. 위쪽의 장소정보는 target에 저장.
+                         장소세부정보는 target_info에 저장 (현재 테이블은 분리해놓은상태)
                     </div>
                         <button type="submit" class="btn btn-primary">장소등록</button>
                     </form>

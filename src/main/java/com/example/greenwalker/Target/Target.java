@@ -4,6 +4,7 @@ import com.example.greenwalker.Member.Member;
 
 import com.example.greenwalker.TargetInfo.TargetInfo;
 import com.example.greenwalker.TargetStatus.TargetStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

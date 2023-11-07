@@ -41,6 +41,7 @@ dependencies {
 	// 스프링 시큐리티 관련 (스프링부트 프레임워크 + 타임리프 시큐리티 관련)
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+
 }
 
 tasks.named('test') {
