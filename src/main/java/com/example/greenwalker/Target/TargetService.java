@@ -30,13 +30,15 @@ public class TargetService {
 
   }
 
-  public List<Target> searchTarget(Double latclick1, Double lngclick1, Integer radius) {
+  public List<Target> searchTarget(Double latclick1, Double lngclick1) {
     List<Target> allTarget = targetRepository.findAll();
     List<Target> nearbyPlaces = new ArrayList<>();
 
+    // 하버사인 공식에 의해 출발지를 기준으로 반경 5km 이내의 장소만 출력 (5km 성인기준 1시간 15분 정도 소요)
+    Integer radius = 5;
+
     for (Target target : allTarget) {
       double distance = calculateDistance(latclick1, lngclick1, target.getLocationLat(), target.getLocationLng());
-      System.out.println(distance); // 하버사인 공식에 의한 직선거리 산출 콘솔 확인용
       if (distance < radius) {
         nearbyPlaces.add(target);
       }

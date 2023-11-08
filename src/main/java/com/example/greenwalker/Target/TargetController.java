@@ -45,30 +45,46 @@ public class TargetController {
     return "redirect:/target/regist";
   }
 
+
+
   @GetMapping("/search")
-  public String targetSearch() {
+  public String targetSearch(Model model) {
+
+    // 현재 활성화할 탭을 설정
+    String activeTab = "pills-home"; // 검색 탭 기본 활성화
+    model.addAttribute("activeTab", activeTab); //
+
     return "search";
   }
 
   @PostMapping("/search")
   public String targetSearch(Model model, @RequestParam Map<String, String> requestParams) {
 
+    String keyword = requestParams.get("keyword");
+    System.out.print(keyword);
+
+    // 현재 활성화할 탭을 설정
+    String activeTab = "pills-profile"; // 모험 탭 유지
+    model.addAttribute("activeTab", activeTab); //
+
     String pname1 = requestParams.get("pname1");
     String paddress1 = requestParams.get("paddress1");
     Double latclick1 = Double.parseDouble(requestParams.get("latclick1"));
     Double lngclick1 = Double.parseDouble(requestParams.get("lngclick1"));
-    Integer radius = Integer.parseInt(requestParams.get("radius"));
+
 
     // 입력값 유지용 (너무 조잡하다)
+    model.addAttribute("keyword", keyword);
+
     model.addAttribute("pname1", pname1);
     model.addAttribute("paddress1", paddress1);
     model.addAttribute("latclick1", latclick1);
     model.addAttribute("lngclick1", lngclick1);
 
-    List<Target> searchresult = this.targetService.searchTarget(latclick1, lngclick1, radius);
+    List<Target> searchresult = this.targetService.searchTarget(latclick1, lngclick1);
 
     model.addAttribute("searchresult", searchresult);
 
-    return "search";
+    return "/search";
   }
 }

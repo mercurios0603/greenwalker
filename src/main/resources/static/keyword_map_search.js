@@ -1,40 +1,27 @@
 // 마커를 담을 배열입니다
 var markers = [];
 
+var lat = document.getElementById("latclick1").value;
+var lng = document.getElementById("lngclick1").value;
+
+// 사용자가 목적지 탐색시 지정했던 장소의 위도와 경도의 존재 여부를 확인하고
+// 그렇지 않다면 삼항 연산자를 사용해, 지도 중심의 기본값(현재 유성온천역)을 설정합니다.
+// 이 값은 향후 사용자의 홈값 또는 GPS 값으로 대체될 수 있습니다.
+
+var defaultLat = 36.353720; // 기본 위도 값
+var defaultLng = 127.341445; // 기본 경도 값
+
+lat = lat ? parseFloat(lat) : defaultLat;
+lng = lng ? parseFloat(lng) : defaultLng;
+
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {
-        center: new kakao.maps.LatLng(36.352646, 127.343724), // 지도의 중심좌표 (현재 유성온천역)
-        level: 5 // 지도의 확대 레벨
+        center: new kakao.maps.LatLng(lat, lng),
+        level: 4 // 지도의 확대 레벨
     };
 
 // 지도를 생성합니다
 var map = new kakao.maps.Map(mapContainer, mapOption);
-
-// HTML5의 geolocation으로 사용할 수 있는지 확인합니다
-if (navigator.geolocation) {
-
-    // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-    navigator.geolocation.getCurrentPosition(function(position) {
-
-        var lat = position.coords.latitude, // 위도
-            lon = position.coords.longitude; // 경도
-
-        var locPosition = new kakao.maps.LatLng(lat, lon) // geolocation으로 얻어온 좌표
-        presentPosition=locPosition;
-
-        map.setCenter(locPosition);
-
-      }, function(error) {
-
-      // GeoLocation 허용하지 않았을 때.
-            alert('GPS 기능이 활성화되지 않았습니다.');
-            var locPosition = new kakao.maps.LatLng(36.352646, 127.343724) // 지도의 중심좌표 (현재 유성온천역)
-            presentPosition=locPosition;
-            map.setCenter(locPosition);
-
-      });
-}
-
 
 // 장소 검색 객체를 생성합니다
 var ps = new kakao.maps.services.Places();
@@ -43,7 +30,7 @@ var ps = new kakao.maps.services.Places();
 var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 
 // 키워드로 장소를 검색합니다
-searchPlaces();
+document.getElementById("searchkeyword").addEventListener("click", searchPlaces);
 
 // 키워드 검색을 요청하는 함수입니다
 function searchPlaces() {
@@ -113,13 +100,20 @@ function displayPlaces(places) {
         // 해당 장소에 인포윈도우에 장소명을 표시합니다
         // mouseout 했을 때는 인포윈도우를 닫습니다
         // 마커, 장소이름(기본예제의 title), 도로명주소, 지번주소명, 위도(세로선), 경도(가로선)
-        (function(marker, pname, praddress, paddress, plat, plng) {
+        (function(map, marker, pname, praddress, paddress, plat, plng) {
+
+            // 맵을 클릭하면 발생하는 이벤트
+            kakao.maps.event.addListener(map, 'click', function() {
+                infowindow.close();
+            });
 
             // 마우스로 마커를 클릭하면 발생하는 이벤트
             kakao.maps.event.addListener(marker, 'click', function() {
 
+                // 1. 정보창 표시
+                displayInfowindow(marker, pname);
 
-                // 1. 주소 정보들을 text 영역으로 전송 (hidden 사용)
+                // 2. 주소 정보들을 text 영역으로 전송 (hidden 사용)
                 if (praddress) {
                 document.getElementById('fulladdress').value = "[" + pname + "]" + praddress;
                 } else {
@@ -145,28 +139,13 @@ function displayPlaces(places) {
             });
 
             // 마우스를 마커 밖으로 옮기면 발생하는 이벤트
-            kakao.maps.event.addListener(map, 'mouseout', function() {
-                infowindow.close();
+            kakao.maps.event.addListener(marker, 'mouseout', function() {
+
             });
 
             // 리스트의 아이템을 클릭하면 발생하는 이벤트
             itemEl.onclick = function() {
                 // 1. 주소 정보들을 text 영역으로 전송 (hidden 사용)
-                if (praddress) {
-                document.getElementById('fulladdress').value = "[" + pname + "]" + praddress;
-                } else {
-                document.getElementById('fulladdress').value = "[" + pname + "]" + paddress;
-                }
-
-                document.getElementById('pname').value = pname;
-                if (praddress) {
-                    document.getElementById('paddress').value = praddress;
-                } else {
-                    document.getElementById('paddress').value = paddress;
-                }
-                document.getElementById('latclick').value = plat;
-                document.getElementById('lngclick').value = plng;
-
 
                // 2. 길찾기 Get쿼리 추가 (탐험하기로 통합)
 
@@ -182,7 +161,7 @@ function displayPlaces(places) {
                 infowindow.close();
             };
 
-        })(marker, places[i].place_name, places[i].road_address_name, places[i].address_name, places[i].y, places[i].x);
+        })(map, marker, places[i].place_name, places[i].road_address_name, places[i].address_name, places[i].y, places[i].x);
 
         fragment.appendChild(itemEl);
     }
@@ -282,10 +261,37 @@ function displayPagination(pagination) {
 // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
 // 인포윈도우에 장소명을 표시합니다
 function displayInfowindow(marker, title) {
-    var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
+
+     var content = '<div style="padding:5px;z-index:1;">' +
+                        '		       <div>' +
+                                 '        <div>' +
+                                    '         <div>' + title + '</div>' +
+                                    '         <div>' + title + '</div>' +
+                                    '         <div><button type = "button" id = "selectstarting"> 출발지 </button></div>' +
+                                    '         <div><button type = "button" id = "selectdestination"> 도착지 </button></div>' +
+                                 '        </div>' +
+                   '</div>';
 
     infowindow.setContent(content);
     infowindow.open(map, marker);
+
+    document.getElementById("selectstarting").addEventListener('click', getstarting);
+    function getstarting(){
+             document.getElementById('pstarting').value = document.getElementById('fulladdress').value;
+             document.getElementById('pname1').value = document.getElementById('pname').value;
+             document.getElementById('paddress1').value = document.getElementById('paddress').value;
+             document.getElementById('latclick1').value = document.getElementById('latclick').value;
+             document.getElementById('lngclick1').value = document.getElementById('lngclick').value;
+    }
+
+    document.getElementById("selectdestination").addEventListener('click', getdestination);
+    function getdestination(){
+             document.getElementById('pdestination').value = document.getElementById('fulladdress').value;
+             document.getElementById('pname2').value = document.getElementById('pname').value;
+             document.getElementById('paddress2').value = document.getElementById('paddress').value;
+             document.getElementById('latclick2').value = document.getElementById('latclick').value;
+             document.getElementById('lngclick2').value = document.getElementById('lngclick').value;
+    }
 }
 
  // 검색결과 목록의 자식 Element를 제거하는 함수입니다
@@ -295,10 +301,7 @@ function removeAllChildNods(el) {
     }
 }
 
-// GPS Geocoder 관련, 좌표 -> 주소
-var geocoder = new kakao.maps.services.Geocoder();
-function searchDetailAddrFromCoords(coords, callback) {
-    geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
-}
+
+
 
 

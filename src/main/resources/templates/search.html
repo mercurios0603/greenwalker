@@ -11,103 +11,78 @@
         <div class="content-wrap">
             <div class="locationlist">
                 <div>
-                    <form th:action="@{/target/search}" method="post">
-                    <div>
-                        <select class="defaultstarting form-select form-select-lg mb-3" aria-label="Large select example">
-                            <option value="home"> 집 </option>
-                            <option value="company"> 회사 </option>
-                            <option value="favorite"> 즐겨찾기 </option>
-                        </select>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-describedby="basic-addon2" th:value="${keyword} ?: ''" id="keyword" name="keyword" size="15" >
+                        <button class="btn btn-primary" id="searchkeyword"> 검색하기 </button>
                     </div>
-                    <div>
-                        출발지점 <input type="text" id="pstarting" name="pstarting" th:value="${pname1}">
-                        <button type = "button" id = "selectstarting"> 출발지점설정 </button>
-                        <input type="text" id = "pname1" name = "pname1" th:value="${pname1}">
-                        <input type="text" id = "paddress1" name = "paddress1" th:value="${paddress1}">
-                        <input type="text" id = "latclick1" name = "latclick1" th:value="${latclick1}">
-                        <input type="text" id = "lngclick1" name = "lngclick1" th:value="${lngclick1}">
-                    </div>
-
-                    <div>
-                        탐색하고자 하는 반경거리를 입력해주세요 <br/>
-                        <select name ="radius" class=" form-select form-select-lg mb-3" aria-label="Large select example">
-                            <option value="1"> 1km </option>
-                            <option value="2"> 2km </option>
-                            <option value="3"> 3km </option>
-                            <option value="4"> 4km </option>
-                            <option value="5"> 5km </option>
-                            <option value="6"> 6km </option>
-                            <option value="7"> 7km </option>
-                            <option value="8"> 8km </option>
-                            <option value="9"> 9km </option>
-                            <option value="10"> 10km </option>
-                        </select>
-                    </div>
-                    <div>
-                        <button type = "submit" id = "searchtarget"> 목적지 탐색하기 </button>
-                    </div>
-                    </form>
-                    <div>
-                        도착지점 <input type="text" id="pdestination" name="pdestination">
-                        <button type = "button" id = "selectdestination"> 도착지점설정 </button>
-                        <input type="text" id="pname2" name="pname2" value="">
-                        <input type="text" id="paddress2" name="paddress2" value="">
-                        <input type="text" id="latclick2" name="latclick2" value="">
-                        <input type="text" id="lngclick2" name="lngclick2" value="">
-                    </div>
-                    <div>
-                        출발지점부터 목적지까지의 거리 </br>
-                        <input type="text" id="pdistance" name="pdistance" >
-                    </div>
-                    <div>
-                        <button type = "button" id = "adventure"> 탐험하기 </button>
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true" th:classappend="${activeTab == 'pills-home' ? 'active' : ''}">검색</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false" th:classappend="${activeTab == 'pills-profile' ? 'active' : ''}">모험</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false" th:classappend="${activeTab == 'pills-contact' ? 'active' : ''}">MY</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0" th:classappend="${activeTab == 'pills-home' ? 'show active' : ''}">
+                            <div id="menu_wrap" class="bg_white">
+                                <ul id="placesList"></ul>
+                                <div id="pagination"></div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0" th:classappend="${activeTab == 'pills-profile' ? 'show active' : ''}">
+                            <form th:action="@{/target/search}" method="post">
+                                <div>
+                                    <select class="defaultstarting form-select form-select-lg mb-3" aria-label="Large select example">
+                                        <option value="home"> 집 </option>
+                                        <option value="company"> 회사 </option>
+                                        <option value="favorite"> 즐겨찾기 </option>
+                                    </select>
+                                </div>
+                                <div>
+                                    출발지점 <input type="text" id="pstarting" name="pstarting" th:value="${pname1} ?: ''">
+                                    <input type="hidden" id = "pname1" name = "pname1" th:value="${pname1 ?: ''}">
+                                    <input type="hidden" id = "paddress1" name = "paddress1" th:value="${paddress1} ?: ''">
+                                    <input type="hidden" id = "latclick1" name = "latclick1" th:value="${latclick1} ?: ''">
+                                    <input type="hidden" id = "lngclick1" name = "lngclick1" th:value="${lngclick1} ?: ''">
+                                </div>
+                                <div>
+                                    <button type = "submit" id = "searchtarget"> 목적지 탐색하기 </button>
+                                </div>
+                            </form>
+                                <div>
+                                    도착지점 <input type="text" id="pdestination" name="pdestination">
+                                    <input type="hidden" id="pname2" name="pname2" value="">
+                                    <input type="hidden" id="paddress2" name="paddress2" value="">
+                                    <input type="hidden" id="latclick2" name="latclick2" value="">
+                                    <input type="hidden" id="lngclick2" name="lngclick2" value="">
+                                </div>
+                                <div>
+                                    <button type = "button" id = "adventure"> 탐험하기 </button>
+                                </div>
+                                <div>
+                                    <!-- 위도 및 경도 좌표 및 위치정보 -->
+                                    <input type="text" id="fulladdress" name="fulladdress" style="width:100%;" disabled>
+                                    <input type="text" id="pname" name="pname" value="" disabled>
+                                    <input type="text" id="paddress" name="paddress" value="" disabled>
+                                    <input type="text" id="latclick" name="latclick" value="" disabled>
+                                    <input type="text" id="lngclick" name="lngclick" value="" disabled>
+                                </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0" th:classappend="${activeTab == 'pills-contact' ? 'show active' : ''}">
+                            MY
+                        </div>
                     </div>
                 </div>
-                    <div>
-                        <!-- 위도 및 경도 좌표 및 위치정보 -->
-                        현재 선택한 장소
-                        <input type="text" id="fulladdress" name="fulladdress" style="width:100%;" disabled>
-                        <input type="text" id="pname" name="pname" value="" disabled>
-                        <input type="text" id="paddress" name="paddress" value="" disabled>
-                        <input type="text" id="latclick" name="latclick" value="" disabled>
-                        <input type="text" id="lngclick" name="lngclick" value="" disabled>
-                    </div>
-                    <table>
-                        <h4> 반경 이내의 장소입니다. </h4>
-                        <thead>
-                            <tr>
-                                <th>장소명</th>
-                                <th>주소</th>
-                                <th>위도</th>
-                                <th>경도</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="searchresult : ${searchresult}">
-                                <td th:text="${searchresult.locationName}"></td>
-                                <td th:text="${searchresult.locationAddress}"></td>
-                                <td th:text="${searchresult.locationLat}"></td>
-                                <td th:text="${searchresult.locationLng}"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            </div>
             <div class="mapside">
                 <div id="wrapper">
 
                     <div class="map_wrap">
                         <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-                        <div id="menu_wrap" class="bg_white">
-                            <div class="option">
-                                <div>
-                                    키워드 : <input type="text" value="대전 IT아카데미" id="keyword" size="15">
-                                    <button onclick="searchPlaces(); return false;">검색하기</button>
-                                </div>
-                            </div>
-                            <hr>
-                            <ul id="placesList"></ul>
-                            <div id="pagination"></div>
-                        </div>
                     </div>
 
                     <script type="text/javascript"
@@ -147,7 +122,8 @@
                                     '            <div class="classse"> 기간(더미 데이터) </div>' +
                                  '        </div>' +
                         '			   </div>' +
-                    ' 			   </a>';
+                    ' 			   </a>' +
+                    '             <div><button type = "button" id = "selectdestination"> 목표지점설정 </button></div>';
 
                     // 마커를 클릭하면 발생하는 이벤트
                     kakao.maps.event.addListener(marker, 'click', function() {
@@ -178,39 +154,15 @@
                     </script>
 
                     <script>
-                        document.getElementById("selectstarting").addEventListener('click', getstarting);
-                        function getstarting(){
-                                 document.getElementById('pstarting').value = document.getElementById('fulladdress').value;
-                                 document.getElementById('pname1').value = document.getElementById('pname').value;
-                                 document.getElementById('paddress1').value = document.getElementById('paddress').value;
-                                 document.getElementById('latclick1').value = document.getElementById('latclick').value;
-                                 document.getElementById('lngclick1').value = document.getElementById('lngclick').value;
-                                 alert("출발 지점의 정보를 가져옵니다.");
-                        }
+                    document.getElementById("adventure").addEventListener('click', adventurestart);
+                    function adventurestart(){
+                            alert("탐험을 시작합니다");
 
-                        document.getElementById("selectdestination").addEventListener('click', getdestination);
-                        function getdestination(){
-                                 document.getElementById('pdestination').value = document.getElementById('fulladdress').value;
-                                 document.getElementById('pname2').value = document.getElementById('pname').value;
-                                 document.getElementById('paddress2').value = document.getElementById('paddress').value;
-                                 document.getElementById('latclick2').value = document.getElementById('latclick').value;
-                                 document.getElementById('lngclick2').value = document.getElementById('lngclick').value;
-                                alert("도착 지점의 정보를 가져옵니다.");
-                        }
+                            // ===는 일치 연산자로, 값과 자료형이 완전히 일치하는지를 검사합니다.
+                            // 이것은 느슨한 동등 비교 (==)와 달리 자료형까지 비교합니다.
+                            window.open('https://map.kakao.com/?target=walk&sName=' + document.getElementById('pname1').value + '&eName=' + document.getElementById('pname2').value);
 
-                        document.getElementById("adventure").addEventListener('click', adventurestart);
-                        function adventurestart(){
-                                alert("탐험을 시작합니다");
-                                searchDetailAddrFromCoords(presentPosition, function(result, status) {
-
-                                // ===는 일치 연산자로, 값과 자료형이 완전히 일치하는지를 검사합니다.
-                                // 이것은 느슨한 동등 비교 (==)와 달리 자료형까지 비교합니다.
-
-                                if (status === kakao.maps.services.Status.OK) {
-                                    window.open('https://map.kakao.com/?target=walk&sName=' + document.getElementById('pname1').value + '&eName=' + document.getElementById('pname2').value);
-                                    }
-                                });
-                        }
+                    }
                     </script>
                 </div>
             </div>
