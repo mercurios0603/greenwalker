@@ -82,31 +82,6 @@
                         // 지도를 생성합니다
                         var map = new kakao.maps.Map(mapContainer, mapOption);
 
-                        // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
-                        if (navigator.geolocation) {
-
-                            // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-                            navigator.geolocation.getCurrentPosition(function(position) {
-
-                                var lat = position.coords.latitude, // 위도
-                                    lon = position.coords.longitude; // 경도
-
-                                var locPosition = new kakao.maps.LatLng(lat, lon) // geolocation으로 얻어온 좌표
-                                presentPosition=locPosition;
-
-                                map.setCenter(locPosition);
-
-                              }, function(error) {
-
-                              // GeoLocation 허용하지 않았을 때.
-                                    alert('GPS 기능이 활성화되지 않았습니다.');
-                                    var locPosition = new kakao.maps.LatLng(36.352646, 127.343724) // 지도의 중심좌표 (현재 유성온천역)
-                                    presentPosition=locPosition;
-                                    map.setCenter(locPosition);
-
-                              });
-                        }
-
 
                         // 장소 검색 객체를 생성합니다
                         var ps = new kakao.maps.services.Places();
@@ -344,14 +319,6 @@
                                 el.removeChild (el.lastChild);
                             }
                         }
-
-                        // 좌표 -> 주소
-                        var geocoder = new kakao.maps.services.Geocoder();
-                        function searchDetailAddrFromCoords(coords, callback) {
-                            geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
-                        }
-
-
 
                     </script>
                 </div>

@@ -5,10 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-<div layout:fragment="content">
+<div class = "p-5" layout:fragment="content">
     <h3 th:text="${member.username} + '님의 마이페이지입니다'"></h3>
     <table class="table">
-        <thead class="table-dark">
+        <thead class="table-success">
         <tr class="text-center">
             <th>PK</th>
             <th>아이디</th>
@@ -25,7 +25,7 @@
     </table>
     <h3> 등록한 장소는 다음과 같습니다. </h3>
     <table class="table">
-        <thead class="table-dark">
+        <thead class="table-success">
         <tr class="text-center">
             <th>카테고리</th>
             <th>장소명</th>

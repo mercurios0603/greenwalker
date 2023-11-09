@@ -28,6 +28,7 @@ var ps = new kakao.maps.services.Places();
 
 // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다 (마커기준 z방향으로 1떨어진 위치)
 var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+var simpleinfowindow = new kakao.maps.InfoWindow({zIndex:1});
 
 // 키워드로 장소를 검색합니다
 document.getElementById("searchkeyword").addEventListener("click", searchPlaces);
@@ -105,19 +106,23 @@ function displayPlaces(places) {
             // 맵을 클릭하면 발생하는 이벤트
             kakao.maps.event.addListener(map, 'click', function() {
                 infowindow.close();
+                simpleinfowindow.close();
             });
 
             // 마우스로 마커를 클릭하면 발생하는 이벤트
             kakao.maps.event.addListener(marker, 'click', function() {
+
+                // 0. 간단 정보창 닫기
+                simpleinfowindow.close();
 
                 // 1. 정보창 표시
                 displayInfowindow(marker, pname);
 
                 // 2. 주소 정보들을 text 영역으로 전송 (hidden 사용)
                 if (praddress) {
-                document.getElementById('fulladdress').value = "[" + pname + "]" + praddress;
+                document.getElementById('fulladdress').value = pname + "(" + praddress + ")";
                 } else {
-                document.getElementById('fulladdress').value = "[" + pname + "]" + paddress;
+                document.getElementById('fulladdress').value = pname + "(" + paddress + ")";
                 }
 
                 document.getElementById('pname').value = pname;
@@ -135,12 +140,12 @@ function displayPlaces(places) {
 
             // 마우스를 마커 위에 두면 발생하는 이벤트
             kakao.maps.event.addListener(marker, 'mouseover', function() {
-                displayInfowindow(marker, pname);
+                displaysimpleInfowindow(marker, pname);
             });
 
             // 마우스를 마커 밖으로 옮기면 발생하는 이벤트
             kakao.maps.event.addListener(marker, 'mouseout', function() {
-
+                simpleinfowindow.close();
             });
 
             // 리스트의 아이템을 클릭하면 발생하는 이벤트
@@ -153,12 +158,12 @@ function displayPlaces(places) {
 
             // 아이템 리스트에 마우스를 올리면 발생하는 이벤트
             itemEl.onmouseover =  function () {
-                displayInfowindow(marker, pname);
+                displaysimpleInfowindow(marker, pname);
             };
 
             // 아이템 리스트에서 마우스를 제거하면 발생하는 이벤트
             itemEl.onmouseout =  function () {
-                infowindow.close();
+                simpleinfowindow.close();
             };
 
         })(map, marker, places[i].place_name, places[i].road_address_name, places[i].address_name, places[i].y, places[i].x);
@@ -258,8 +263,13 @@ function displayPagination(pagination) {
     paginationEl.appendChild(fragment);
 }
 
-// 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
-// 인포윈도우에 장소명을 표시합니다
+function displaysimpleInfowindow(marker, title) {
+    var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
+    simpleinfowindow.setContent(content);
+    simpleinfowindow.open(map, marker);
+}
+
+// 마커를 클릭했을 때 호출되는 함수입니다
 function displayInfowindow(marker, title) {
 
      var content = '<div style="padding:5px;z-index:1;">' +

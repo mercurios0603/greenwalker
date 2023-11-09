@@ -33,47 +33,45 @@
                                 <div id="pagination"></div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0" th:classappend="${activeTab == 'pills-profile' ? 'show active' : ''}">
+                        <div class="tab-pane fade p-3" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0" th:classappend="${activeTab == 'pills-profile' ? 'show active' : ''}">
                             <form th:action="@{/target/search}" method="post">
-                                <div>
-                                    <select class="defaultstarting form-select form-select-lg mb-3" aria-label="Large select example">
-                                        <option value="home"> 집 </option>
-                                        <option value="company"> 회사 </option>
-                                        <option value="favorite"> 즐겨찾기 </option>
-                                    </select>
-                                </div>
-                                <div>
-                                    출발지점 <input type="text" id="pstarting" name="pstarting" th:value="${pname1} ?: ''">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="pstarting" name="pstarting" placeholder="출발지" th:value="${pname1} ?: ''" readonly>
+                                    <label for="pstarting">출발지를 입력해주세요</label>
                                     <input type="hidden" id = "pname1" name = "pname1" th:value="${pname1 ?: ''}">
                                     <input type="hidden" id = "paddress1" name = "paddress1" th:value="${paddress1} ?: ''">
                                     <input type="hidden" id = "latclick1" name = "latclick1" th:value="${latclick1} ?: ''">
                                     <input type="hidden" id = "lngclick1" name = "lngclick1" th:value="${lngclick1} ?: ''">
                                 </div>
-                                <div>
-                                    <button type = "submit" id = "searchtarget"> 목적지 탐색하기 </button>
-                                </div>
-                            </form>
-                                <div>
-                                    도착지점 <input type="text" id="pdestination" name="pdestination">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="pdestination" name="pdestination" placeholder="도착지" readonly>
+                                    <label for="pdestination">도착지를 입력해주세요</label>
                                     <input type="hidden" id="pname2" name="pname2" value="">
                                     <input type="hidden" id="paddress2" name="paddress2" value="">
                                     <input type="hidden" id="latclick2" name="latclick2" value="">
                                     <input type="hidden" id="lngclick2" name="lngclick2" value="">
                                 </div>
-                                <div>
-                                    <button type = "button" id = "adventure"> 탐험하기 </button>
+                                <div class="text-center">
+                                    <button class="btn btn-primary m-2" type="submit" id = "searchtarget"> 미션탐색 </button>
+                                    <button class="btn btn-primary m-2" id = "adventure"> 탐험하기 </button>
                                 </div>
+                            </form>
                                 <div>
                                     <!-- 위도 및 경도 좌표 및 위치정보 -->
-                                    <input type="text" id="fulladdress" name="fulladdress" style="width:100%;" disabled>
-                                    <input type="text" id="pname" name="pname" value="" disabled>
-                                    <input type="text" id="paddress" name="paddress" value="" disabled>
-                                    <input type="text" id="latclick" name="latclick" value="" disabled>
-                                    <input type="text" id="lngclick" name="lngclick" value="" disabled>
+                                    <input type="hidden" id="fulladdress" name="fulladdress" style="width:100%;" readonly>
+                                    <input type="hidden" id="pname" name="pname" value="" readonly>
+                                    <input type="hidden" id="paddress" name="paddress" value="" readonly>
+                                    <input type="hidden" id="latclick" name="latclick" value="" readonly>
+                                    <input type="hidden" id="lngclick" name="lngclick" value="" readonly>
                                 </div>
                         </div>
-                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0" th:classappend="${activeTab == 'pills-contact' ? 'show active' : ''}">
-                            MY
+                        <div class="tab-pane fade text-center p-3" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0" th:classappend="${activeTab == 'pills-contact' ? 'show active' : ''}">
+                            <button type="button" class="btn btn-primary">마이페이지는 개발중입니다</button>
+                            <select class="defaultstarting form-select form-select-lg my-3" aria-label="Large select example">
+                                 <option value="home"> 집 </option>
+                                 <option value="company"> 회사 </option>
+                                 <option value="favorite"> 즐겨찾기 </option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -101,43 +99,22 @@
                         yAnchor: 1.2
                     });
 
+
                     /*[# th:each="searchResult : ${searchresult}"]*/
 
                     var marker = new kakao.maps.Marker({
                         map: map,
                         position: new kakao.maps.LatLng('[[${searchResult.locationLat}]]', '[[${searchResult.locationLng}]]')
+
                     });
 
                     // 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
                     (function(marker, overlay, id, locationCategory, locationName, locationAddress, locationLat, locationLng) {
 
-                    // 커스텀 오버레이 UI
-                    var content = '<a href="/targetinfo/' + id + '" target="_blank">' +
-                    '		       <div class = "wrap">' +
-                        '					<div class = "classimg"><img src = "/samplelogo.jpg" width="160" height="160" style="border-top-left-radius:15px; border-top-right-radius:15px;"></div>' +
-                                   '        <div class="classinfo">' +
-                                    '            <div class="classtitle">' + locationName + '</div>' +
-                                    '            <div class="classfounder">' + locationAddress + '</div>' +
-                                    '            <div class="classpay">' + locationCategory + '</div>' +
-                                    '            <div class="classse"> 기간(더미 데이터) </div>' +
-                                 '        </div>' +
-                        '			   </div>' +
-                    ' 			   </a>' +
-                    '             <div><button type = "button" id = "selectdestination"> 목표지점설정 </button></div>';
 
                     // 마커를 클릭하면 발생하는 이벤트
                     kakao.maps.event.addListener(marker, 'click', function() {
-
-                        overlay.setContent(content);
-                        overlay.setPosition(new kakao.maps.LatLng(locationLat, locationLng));
-                        overlay.setMap(map);
-
-                        // 1. 주소 정보들을 text 영역으로 전송 (hidden 사용)
-                        document.getElementById('fulladdress').value = "[" + locationName + "]" + locationAddress;
-                        document.getElementById('pname').value = locationName;
-                        document.getElementById('paddress').value = locationAddress;
-                        document.getElementById('latclick').value = locationLat;
-                        document.getElementById('lngclick').value = locationLng;
+                        displayoverlay(marker, id, locationCategory, locationName, locationAddress, locationLat, locationLng);
                     });
 
                     // 마우스로 지도를 누르면 발생하는 이벤트
@@ -150,6 +127,40 @@
                     [[${searchResult.locationAddress}]], [[${searchResult.locationLat}]], [[${searchResult.locationLng}]]);
 
                     /*[/]*/
+
+                    function displayoverlay(marker, id, locationCategory, locationName, locationAddress, locationLat, locationLng) {
+
+                         // 커스텀 오버레이 UI
+                        var content = '<div class = "wrap">' +
+                        '		       <a href="/targetinfo/' + id + '" target="_blank">' +
+                            '					<div class = "classimg"><img src = "/samplelogo.jpg" width="160" height="160" style="border-top-left-radius:15px; border-top-right-radius:15px;"></div>' +
+                        '              </a>' +
+                                       '        <div class="classinfo">' +
+                                        '            <div class="classtitle">' + locationName + '</div>' +
+                                        '            <div class="classfounder">' + locationAddress + '</div>' +
+                                        '            <div class="classpay">' + locationCategory + '</div>' +
+                                        '            <div class="classse"> 기간(더미 데이터) </div>' +
+                                        '            <div><button type = "button" id = "selectdestination"> 목표지점설정 </button></div>' +
+                                     '        </div>' +
+                            '			   </div>';
+
+
+
+
+                        overlay.setContent(content);
+                        overlay.setPosition(new kakao.maps.LatLng(locationLat, locationLng));
+                        overlay.setMap(map);
+
+                        document.getElementById("selectdestination").addEventListener('click', gettarget);
+                        function gettarget(){
+                                 document.getElementById('pdestination').value = locationName + "(" + locationAddress + ")";
+                                 document.getElementById('pname2').value = locationName;
+                                 document.getElementById('paddress2').value = locationAddress;
+                                 document.getElementById('latclick2').value = locationLat;
+                                 document.getElementById('lngclick2').value = locationLng;
+                        }
+                    }
+
 
                     </script>
 

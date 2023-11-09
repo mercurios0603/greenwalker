@@ -72,7 +72,6 @@ public class TargetController {
     Double latclick1 = Double.parseDouble(requestParams.get("latclick1"));
     Double lngclick1 = Double.parseDouble(requestParams.get("lngclick1"));
 
-
     // 입력값 유지용 (너무 조잡하다)
     model.addAttribute("keyword", keyword);
 
