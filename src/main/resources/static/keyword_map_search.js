@@ -30,6 +30,25 @@ var ps = new kakao.maps.services.Places();
 var infowindow = new kakao.maps.InfoWindow({zIndex:1});
 var simpleinfowindow = new kakao.maps.InfoWindow({zIndex:1});
 
+document.getElementById("searchkeyword").addEventListener("click", toggleMenuWrap);
+
+// 메뉴 스타일 토글 함수
+function toggleMenuWrap() {
+    var keywordValue = document.getElementById("keyword").value;
+    var menuWrap = document.getElementById("menu_wrap");
+    var menuWrap2 = document.getElementById("menu_wrap2");
+
+    if (keywordValue.trim() == "") {
+        // 키워드가 존재하지 않을 때
+        menuWrap.style.display = "none";
+        menuWrap2.style.display = "block";
+    } else {
+        // 키워드가 있을 때
+        menuWrap.style.display = "block";
+        menuWrap2.style.display = "none";
+    }
+}
+
 // 키워드로 장소를 검색합니다
 document.getElementById("searchkeyword").addEventListener("click", searchPlaces);
 
@@ -69,6 +88,7 @@ function placesSearchCB(data, status, pagination) {
         return;
 
     }
+
 }
 
 // 검색 결과 목록과 마커를 표출하는 함수입니다
@@ -116,7 +136,7 @@ function displayPlaces(places) {
                 simpleinfowindow.close();
 
                 // 1. 정보창 표시
-                displayInfowindow(marker, pname);
+                displayInfowindow(marker, pname, praddress, paddress);
 
                 // 2. 주소 정보들을 text 영역으로 전송 (hidden 사용)
                 if (praddress) {
@@ -169,6 +189,7 @@ function displayPlaces(places) {
         })(map, marker, places[i].place_name, places[i].road_address_name, places[i].address_name, places[i].y, places[i].x);
 
         fragment.appendChild(itemEl);
+
     }
 
     // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
@@ -177,6 +198,9 @@ function displayPlaces(places) {
 
     // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
     map.setBounds(bounds);
+
+
+
 }
 
 // 검색결과 항목을 Element로 반환하는 함수입니다
@@ -270,17 +294,19 @@ function displaysimpleInfowindow(marker, title) {
 }
 
 // 마커를 클릭했을 때 호출되는 함수입니다
-function displayInfowindow(marker, title) {
+function displayInfowindow(marker, pname, praddress, paddress) {
 
-     var content = '<div style="padding:5px;z-index:1;">' +
-                        '		       <div>' +
-                                 '        <div>' +
-                                    '         <div>' + title + '</div>' +
-                                    '         <div>' + title + '</div>' +
-                                    '         <div><button type = "button" id = "selectstarting"> 출발지 </button></div>' +
-                                    '         <div><button type = "button" id = "selectdestination"> 도착지 </button></div>' +
-                                 '        </div>' +
-                   '</div>';
+     var content = '<div class = "wrap">' +
+                '		       <div class = "classimg"><img src = "/samplelogo.jpg" width="160" height="160"></div>' +
+                         '        <div class="classinfo">' +
+                            '            <div class="classtitle">' + pname + '</div>' +
+                            '            <div class="classfounder">' + paddress + '</div>' +
+                            '            <div class="classbutton">' +
+                            '            <button type = "button" id = "selectstarting"> 출발지 </button>' +
+                            '            <button type = "button" id = "selectdestination"> 도착지 </button>' +
+                            '           </div>' +
+                         '        </div>' +
+                '			   </div>';
 
     infowindow.setContent(content);
     infowindow.open(map, marker);
@@ -310,6 +336,9 @@ function removeAllChildNods(el) {
         el.removeChild (el.lastChild);
     }
 }
+
+
+
 
 
 

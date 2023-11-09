@@ -6,24 +6,66 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <table class="table">
-        <thead>
-        <tr class="text-center">
-            <th scope="col">PK</th>
-            <th scope="col">카테고리</th>
-            <th scope="col">장소명 </th>
-            <th scope="col">주소 </th>
-        </tr>
-        </thead>
-        <tbody class="table-group-divider">
-        <tr class="text-center">
-            <td> PK (더미 데이터) </td>
-            <td> DB_Category (더미 데이터) </td>
-            <td> DB_Name (더미 데이터) </td>
-            <td> DB_Address (더미 데이터) </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="location-profile py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-transparent text-center">
+                            <img class="profile_img" height="300" width="350" src="/target_mark.png" alt="student dp">
+                            <h3> 통곡의 언덕(시민 천문대) </h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0"><strong class="pr-1">주소 :</strong> 대전시 유성구 315번지 26 </p>
+                            <p class="mb-0"><strong class="pr-1">목표분류 :</strong> 일반 타겟 </p>
+                            <p class="mb-0"><strong class="pr-1">난이도 :</strong> 가파른 언덕길 (A) </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h3 class="mb-0"><i class="far fa-clone pr-1"></i>장소에서 얻을 수 있는 능력치</h3>
+                        </div>
+                        <div class="card-body pt-0">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>체력회복</th>
+                                    <td>125</td>
+                                </tr>
+                                <tr>
+                                    <th>마력회복</th>
+                                    <td>20</td>
+                                </tr>
+                                <tr>
+                                    <th>힘</th>
+                                    <td>15</td>
+                                </tr>
+                                <tr>
+                                    <th>민첩</th>
+                                    <td>10</td>
+                                </tr>
+                                <tr>
+                                    <th>지력</th>
+                                    <td>5</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="height: 26px"></div>
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h3 class="mb-0"><i class="far fa-clone pr-1"></i> 보상 아이템 </h3>
+                        </div>
+                        <div class="card-body pt-0">
+                            <p> 해당 타겟은 24시간 지속됩니다. </p>
+                            <p> 목표에 도달하시면 자사몰에서 사용할 수 있는 10% 상품권을 드립니다. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

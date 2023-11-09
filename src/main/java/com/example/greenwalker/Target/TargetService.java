@@ -1,5 +1,6 @@
 package com.example.greenwalker.Target;
 
+import com.example.greenwalker.DataNotFoundException;
 import com.example.greenwalker.Member.Member;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -56,5 +58,15 @@ public class TargetService {
             * Math.sin(dLng / 2) * Math.sin(dLng / 2);
     double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return earthRadius * c;
+  }
+
+  public Target getTarget(Long id) {
+    // JpaRepository의 기능을 이용하여 기사번호 id에 맞는 기사를 찾아 가져오는 것임
+    Optional<Target> target = this.targetRepository.findById(id);
+    if (target.isPresent()) {
+      return target.get();
+    } else {
+      throw new DataNotFoundException("article not found");
+    }
   }
 }

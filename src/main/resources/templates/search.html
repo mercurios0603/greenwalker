@@ -9,11 +9,12 @@
 <div layout:fragment="content">
     <div class="main-wrap">
         <div class="content-wrap">
-            <div class="locationlist">
+            <div class="locationlist p-3">
                 <div>
+                    <form th:action="@{/target/search}" th:object="${targetSearchForm}" method="post">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-describedby="basic-addon2" th:value="${keyword} ?: ''" id="keyword" name="keyword" size="15" >
-                        <button class="btn btn-primary" id="searchkeyword"> 검색하기 </button>
+                        <input type="text" class="form-control" placeholder="검색어를 입력해주세요" aria-describedby="basic-addon2" id="keyword" name="keyword" th:field="*{keyword}" th:value="${keyword} ?: ''" size="15" >
+                        <button class="btn btn-primary" id="searchkeyword" type = "button"> 검색하기 </button>
                     </div>
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -28,20 +29,44 @@
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0" th:classappend="${activeTab == 'pills-home' ? 'show active' : ''}">
-                            <div id="menu_wrap" class="bg_white">
+                            <div id="menu_wrap" class="bg_white" style="display: none;">
                                 <ul id="placesList"></ul>
                                 <div id="pagination"></div>
                             </div>
+                            <div id="menu_wrap2" style="display: block;">
+                                <img src="/search_main.jpg" class="img-fluid" alt="...">
+                                <h2 class="text-center my-3">원하는 장소를 검색하세요</h2>
+                            </div>
                         </div>
+
                         <div class="tab-pane fade p-3" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0" th:classappend="${activeTab == 'pills-profile' ? 'show active' : ''}">
-                            <form th:action="@{/target/search}" method="post">
+
+                                <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                                    <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+                                </div>
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="pstarting" name="pstarting" placeholder="출발지" th:value="${pname1} ?: ''" readonly>
+                                    <input type="text" class="form-control" placeholder="출발지" id="pstarting" th:field="*{pstarting}" th:value="${pstarting} ?: ''" readonly>
                                     <label for="pstarting">출발지를 입력해주세요</label>
-                                    <input type="hidden" id = "pname1" name = "pname1" th:value="${pname1 ?: ''}">
-                                    <input type="hidden" id = "paddress1" name = "paddress1" th:value="${paddress1} ?: ''">
-                                    <input type="hidden" id = "latclick1" name = "latclick1" th:value="${latclick1} ?: ''">
-                                    <input type="hidden" id = "lngclick1" name = "lngclick1" th:value="${lngclick1} ?: ''">
+                                    <input type="hidden" th:field="*{pname1}" th:value="${pname1 ?: ''}">
+                                    <input type="hidden" th:field="*{paddress1}" th:value="${paddress1} ?: ''">
+                                    <input type="hidden" th:field="*{latclick1}" th:value="${latclick1} ?: ''">
+                                    <input type="hidden" th:field="*{lngclick1}" th:value="${lngclick1} ?: ''">
+                                </div>
+                                <div class="mb-3" th:if="${searchresult}" style="max-height: 400px; overflow-y: auto;">
+                                    <table class="table text-center">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">목표장소</th>
+                                            <th scope="col">목표분류</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="result : ${searchresult}">
+                                            <td th:text="${result.locationName}"></td>
+                                            <td th:text="${result.locationCategory}"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div class="form-floating">
                                     <input type="text" class="form-control" id="pdestination" name="pdestination" placeholder="도착지" readonly>
@@ -52,10 +77,9 @@
                                     <input type="hidden" id="lngclick2" name="lngclick2" value="">
                                 </div>
                                 <div class="text-center">
-                                    <button class="btn btn-primary m-2" type="submit" id = "searchtarget"> 미션탐색 </button>
-                                    <button class="btn btn-primary m-2" id = "adventure"> 탐험하기 </button>
+                                    <button class="btn btn-primary m-2" id = "searchtarget"  type="submit"> 미션탐색 </button>
+                                    <button class="btn btn-primary m-2" id = "adventure" type ="button"> 탐험하기 </button>
                                 </div>
-                            </form>
                                 <div>
                                     <!-- 위도 및 경도 좌표 및 위치정보 -->
                                     <input type="hidden" id="fulladdress" name="fulladdress" style="width:100%;" readonly>
@@ -74,6 +98,7 @@
                             </select>
                         </div>
                     </div>
+                    </form>
                 </div>
             </div>
             <div class="mapside">
@@ -99,13 +124,20 @@
                         yAnchor: 1.2
                     });
 
+                    // 커스텀 마커 이미지 적용
+                    var imageSrc = '/marker_red.png', // 마커이미지의 주소입니다
+                    imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+                    imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+                    // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
 
                     /*[# th:each="searchResult : ${searchresult}"]*/
 
                     var marker = new kakao.maps.Marker({
                         map: map,
-                        position: new kakao.maps.LatLng('[[${searchResult.locationLat}]]', '[[${searchResult.locationLng}]]')
-
+                        position: new kakao.maps.LatLng('[[${searchResult.locationLat}]]', '[[${searchResult.locationLng}]]'),
+                        image: markerImage // 마커이미지 설정
                     });
 
                     // 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
@@ -133,14 +165,13 @@
                          // 커스텀 오버레이 UI
                         var content = '<div class = "wrap">' +
                         '		       <a href="/targetinfo/' + id + '" target="_blank">' +
-                            '					<div class = "classimg"><img src = "/samplelogo.jpg" width="160" height="160" style="border-top-left-radius:15px; border-top-right-radius:15px;"></div>' +
+                            '					<div class = "classimg"><img src = "/target_mark.png" width="160" height="150" style="border-top-left-radius:15px; border-top-right-radius:15px;"></div>' +
                         '              </a>' +
                                        '        <div class="classinfo">' +
                                         '            <div class="classtitle">' + locationName + '</div>' +
                                         '            <div class="classfounder">' + locationAddress + '</div>' +
                                         '            <div class="classpay">' + locationCategory + '</div>' +
-                                        '            <div class="classse"> 기간(더미 데이터) </div>' +
-                                        '            <div><button type = "button" id = "selectdestination"> 목표지점설정 </button></div>' +
+                                        '            <div class="classbutton"><button type = "button" id = "selectdestination"> 목표지점설정 </button></div>' +
                                      '        </div>' +
                             '			   </div>';
 
@@ -165,6 +196,8 @@
                     </script>
 
                     <script>
+
+
                     document.getElementById("adventure").addEventListener('click', adventurestart);
                     function adventurestart(){
                             alert("탐험을 시작합니다");
@@ -174,6 +207,7 @@
                             window.open('https://map.kakao.com/?target=walk&sName=' + document.getElementById('pname1').value + '&eName=' + document.getElementById('pname2').value);
 
                     }
+
                     </script>
                 </div>
             </div>

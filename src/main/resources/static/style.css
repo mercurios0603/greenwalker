@@ -57,6 +57,9 @@ a{
 	height:3.0em
 }
 
+.classbutton {
+    text-align:center;
+}
 
 .classpay {
 	display: inline-block;

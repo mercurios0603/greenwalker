@@ -12,6 +12,11 @@ public class MainController {
     return "main";
   }
 
+  @GetMapping("/guide")
+  public String guiden() {
+    return "guide";
+  }
+
   // redirect와 forward 두 종류가 있다.
   @GetMapping("/")
   public String root() {

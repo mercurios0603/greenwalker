@@ -48,7 +48,7 @@ public class TargetController {
 
 
   @GetMapping("/search")
-  public String targetSearch(Model model) {
+  public String targetSearch(Model model, TargetSearchForm targetsearchForm) {
 
     // 현재 활성화할 탭을 설정
     String activeTab = "pills-home"; // 검색 탭 기본 활성화
@@ -58,29 +58,22 @@ public class TargetController {
   }
 
   @PostMapping("/search")
-  public String targetSearch(Model model, @RequestParam Map<String, String> requestParams) {
+  public String targetSearch(Model model, @RequestParam Map<String, String> requestParams,
+                             @Valid TargetSearchForm targetsearchForm, BindingResult bindingResult) {
 
-    String keyword = requestParams.get("keyword");
-    System.out.print(keyword);
-
-    // 현재 활성화할 탭을 설정
     String activeTab = "pills-profile"; // 모험 탭 유지
-    model.addAttribute("activeTab", activeTab); //
 
-    String pname1 = requestParams.get("pname1");
-    String paddress1 = requestParams.get("paddress1");
-    Double latclick1 = Double.parseDouble(requestParams.get("latclick1"));
-    Double lngclick1 = Double.parseDouble(requestParams.get("lngclick1"));
+    if (bindingResult.hasErrors()) {
+      model.addAttribute("activeTab", activeTab); // 현재 활성화 탭을 설정
+      return "search";
+    }
 
-    // 입력값 유지용 (너무 조잡하다)
-    model.addAttribute("keyword", keyword);
+    model.addAttribute("activeTab", activeTab); // 현재 활성화 탭을 설정
 
-    model.addAttribute("pname1", pname1);
-    model.addAttribute("paddress1", paddress1);
-    model.addAttribute("latclick1", latclick1);
-    model.addAttribute("lngclick1", lngclick1);
+    Double targetLat = Double.valueOf(targetsearchForm.getLatclick1());
+    Double targetLng = Double.valueOf(targetsearchForm.getLngclick1());
 
-    List<Target> searchresult = this.targetService.searchTarget(latclick1, lngclick1);
+    List<Target> searchresult = this.targetService.searchTarget(targetLat, targetLng);
 
     model.addAttribute("searchresult", searchresult);
 

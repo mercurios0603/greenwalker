@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class TargetCreateForm {
 
+  private String keyword;
+
   @NotEmpty(message = "장소 카테고리를 선택해주세요")
   private String locationcategory;
 
