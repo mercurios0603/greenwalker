@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,16 @@ import java.util.Optional;
 public class TargetService {
 
   private final TargetRepository targetRepository;
+
+  public Target getTarget(Long id) {
+    // JpaRepository의 기능을 이용하여 기사번호 id에 맞는 기사를 찾아 가져오는 것임
+    Optional<Target> target = this.targetRepository.findById(id);
+    if (target.isPresent()) {
+      return target.get();
+    } else {
+      throw new DataNotFoundException("article not found");
+    }
+  }
 
   public Target createTarget(String locationcategory, String locationname, String locationaddress, Double locationlat, Double locationlng, Member member) {
 
@@ -30,6 +41,22 @@ public class TargetService {
     this.targetRepository.save(target);
     return target;
 
+  }
+
+  public void modifyTarget(Target target, String locationcategory, String locationname, String locationaddress,
+                           String locationlat, String locationlng) {
+
+    target.setLocationCategory(locationcategory);
+    target.setLocationName(locationname);
+    target.setLocationAddress(locationaddress);
+    target.setLocationLat(Double.valueOf(locationlat));
+    target.setLocationLng(Double.valueOf(locationlng));
+
+    this.targetRepository.save(target);
+  }
+
+  public void deleteTarget(Target target) {
+    this.targetRepository.delete(target);
   }
 
   public List<Target> searchTarget(Double latclick1, Double lngclick1) {
@@ -58,15 +85,5 @@ public class TargetService {
             * Math.sin(dLng / 2) * Math.sin(dLng / 2);
     double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return earthRadius * c;
-  }
-
-  public Target getTarget(Long id) {
-    // JpaRepository의 기능을 이용하여 기사번호 id에 맞는 기사를 찾아 가져오는 것임
-    Optional<Target> target = this.targetRepository.findById(id);
-    if (target.isPresent()) {
-      return target.get();
-    } else {
-      throw new DataNotFoundException("article not found");
-    }
   }
 }

@@ -23,6 +23,8 @@ public class TargetStatus {
 
   private Integer toInt;
 
+  private Integer difficultyLevel;
+
   @OneToOne
   private Target target;
 }

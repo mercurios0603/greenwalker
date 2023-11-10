@@ -10,7 +10,7 @@
     <table class="table">
         <thead class="table-success">
         <tr class="text-center">
-            <th>PK</th>
+            <th>회원번호</th>
             <th>아이디</th>
             <th>이메일주소</th>
         </tr>
@@ -20,23 +20,6 @@
             <td th:text="${member.id}"> </td>
             <td th:text="${member.username}"> </td>
             <td th:text="${member.email}"> </td>
-        </tr>
-        </tbody>
-    </table>
-    <h3> 등록한 장소는 다음과 같습니다. </h3>
-    <table class="table">
-        <thead class="table-success">
-        <tr class="text-center">
-            <th>카테고리</th>
-            <th>장소명</th>
-            <th>주소</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="text-center" th:each="target : ${member.targetlist}">
-            <td th:text="${target.locationCategory}"></td>
-            <td th:text="${target.locationName}"></td>
-            <td th:text="${target.locationAddress}"></td>
         </tr>
         </tbody>
     </table>

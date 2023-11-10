@@ -3,6 +3,7 @@ package com.example.greenwalker.MemberInfo;
 import com.example.greenwalker.DataNotFoundException;
 import com.example.greenwalker.Member.Member;
 import com.example.greenwalker.Member.MemberRepository;
+import com.example.greenwalker.Member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,18 +19,14 @@ import java.util.Optional;
 public class MemberInfoController {
 
   private final MemberRepository memberRepository;
+  private final MemberService memberService;
 
   @GetMapping("")
   public String memberinfo(Model model, Principal principal) {
-    String membername = principal.getName();
-    Optional<Member> memberOptional = memberRepository.findByusername(membername);
 
-    if (memberOptional.isPresent()) {
-      Member member = memberOptional.get();
-      model.addAttribute("member", member);
-    } else {
-      throw new DataNotFoundException("siteuser not found");
-    }
+    Member member = memberService.getMember(principal.getName());
+    model.addAttribute("member", member);
+
     return "member_info";
   }
 }

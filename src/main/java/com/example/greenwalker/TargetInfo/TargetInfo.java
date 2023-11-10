@@ -18,6 +18,8 @@ public class TargetInfo {
 
   private String targetContent;
 
+  private String missionCategory;
+
   @OneToOne
   private Target target;
 }

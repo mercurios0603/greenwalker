@@ -1,5 +1,6 @@
 package com.example.greenwalker.Target;
 
+import com.example.greenwalker.Member.Member;
 import jakarta.validation.constraints.NotEmpty;
 
 import lombok.Getter;
@@ -9,11 +10,6 @@ import lombok.Setter;
 @Setter
 public class TargetCreateForm {
 
-  private String keyword;
-
-  @NotEmpty(message = "장소 카테고리를 선택해주세요")
-  private String locationcategory;
-
   @NotEmpty(message = "장소 선택은 필수사항입니다")
   private String locationname;
 
@@ -22,4 +18,8 @@ public class TargetCreateForm {
   private String locationlat;
 
   private String locationlng;
+
+  @NotEmpty(message = "장소 카테고리를 선택해주세요")
+  private String locationcategory;
+
 }

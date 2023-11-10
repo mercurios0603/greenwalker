@@ -24,13 +24,13 @@
                     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/memberinfo}">마이페이지</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/member/signup}">회원가입</a>
+                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/member/signup}">회원가입</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/target/search}">검색하기</a>
+                    <a class="nav-link" th:href="@{/target/search}">모험하기</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/target/regist}">장소등록</a>
+                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/target/favorite}">즐겨찾기</a>
                 </li>
             </ul>
         </div>

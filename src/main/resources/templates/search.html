@@ -23,9 +23,6 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false" th:classappend="${activeTab == 'pills-profile' ? 'active' : ''}">모험</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false" th:classappend="${activeTab == 'pills-contact' ? 'active' : ''}">MY</button>
-                        </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0" th:classappend="${activeTab == 'pills-home' ? 'show active' : ''}">
@@ -88,14 +85,6 @@
                                     <input type="hidden" id="latclick" name="latclick" value="" readonly>
                                     <input type="hidden" id="lngclick" name="lngclick" value="" readonly>
                                 </div>
-                        </div>
-                        <div class="tab-pane fade text-center p-3" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0" th:classappend="${activeTab == 'pills-contact' ? 'show active' : ''}">
-                            <button type="button" class="btn btn-primary">마이페이지는 개발중입니다</button>
-                            <select class="defaultstarting form-select form-select-lg my-3" aria-label="Large select example">
-                                 <option value="home"> 집 </option>
-                                 <option value="company"> 회사 </option>
-                                 <option value="favorite"> 즐겨찾기 </option>
-                            </select>
                         </div>
                     </div>
                     </form>
