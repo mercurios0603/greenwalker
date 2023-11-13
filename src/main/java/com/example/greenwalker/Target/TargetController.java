@@ -132,6 +132,6 @@ public class TargetController {
 
     model.addAttribute("searchresult", searchresult);
 
-    return "/search";
+    return "search";
   }
 }
